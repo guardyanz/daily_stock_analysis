@@ -1,5 +1,5 @@
 {
-  "name": "daily-stock-analysis-desktop",
+  "name": "ihsg-stock-analysis-desktop",
   "version": "3.21.0",
   "private": true,
   "main": "main.js",
@@ -16,8 +16,8 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.daily-stock-analysis.desktop",
-    "productName": "Daily Stock Analysis",
+    "appId": "id.ihsg-stock-analysis.desktop",
+    "productName": "IHSG Stock Analysis",
     "directories": {
       "output": "dist"
     },
@@ -38,7 +38,8 @@
     ],
     "win": {
       "target": "nsis",
-      "artifactName": "daily-stock-analysis-windows-installer-v${version}.${ext}",
+      "signAndEditExecutable": false,
+      "artifactName": "ihsg-stock-analysis-windows-installer-v${version}.${ext}",
       "publish": [
         {
           "provider": "github",

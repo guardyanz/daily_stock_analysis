@@ -229,6 +229,51 @@ KR_BLUEPRINT = MarketStrategyBlueprint(
     ],
 )
 
+ID_BLUEPRINT = MarketStrategyBlueprint(
+    region="id",
+    title="IHSG Market Regime Strategy",
+    positioning="Focus on IHSG trend, rupiah and Bank Indonesia policy, foreign flow, and IDX sector rotation to define next-session risk posture.",
+    principles=[
+        "Read the IHSG / IDX Composite trend first, then liquidity and foreign-flow narrative.",
+        "Separate broad market beta from sector themes such as banks, commodities, consumers, infrastructure, and technology.",
+        "Translate recap into actionable risk posture while respecting IDX tick-size and ARA/ARB daily limit context.",
+    ],
+    dimensions=[
+        StrategyDimension(
+            name="IHSG Trend",
+            objective="Classify the market as risk-on, range-bound, or defensive.",
+            checkpoints=[
+                "Did IHSG reclaim or lose key support/resistance areas",
+                "Was the move supported by value and breadth if available",
+                "Are large-cap banks and commodity names confirming the index move",
+            ],
+        ),
+        StrategyDimension(
+            name="Macro & Flows",
+            objective="Map rupiah, Bank Indonesia policy, and foreign flow into equity risk appetite.",
+            checkpoints=[
+                "Rupiah direction and USD sensitivity",
+                "Bank Indonesia rate and liquidity narrative",
+                "Foreign net buy/sell tone if available",
+            ],
+        ),
+        StrategyDimension(
+            name="IDX Sector Rotation",
+            objective="Identify persistent leaders and fragile laggards on BEI.",
+            checkpoints=[
+                "Banking, consumer, commodity, infrastructure, and technology rotation",
+                "Earnings or policy catalysts behind leading sectors",
+                "ARA/ARB pressure or crowded short-term themes",
+            ],
+        ),
+    ],
+    action_framework=[
+        "Risk-on: IHSG advances with large-cap confirmation and improving rupiah/flow context.",
+        "Neutral: mixed index and sector signals; focus on selective relative strength.",
+        "Risk-off: IHSG breaks support or foreign-flow/macro pressure rises; prioritize capital preservation.",
+    ],
+)
+
 def get_market_strategy_blueprint(region: str) -> MarketStrategyBlueprint:
     """Return strategy blueprint by market region."""
     if region == "us":
@@ -239,4 +284,6 @@ def get_market_strategy_blueprint(region: str) -> MarketStrategyBlueprint:
         return JP_BLUEPRINT
     if region == "kr":
         return KR_BLUEPRINT
+    if region == "id":
+        return ID_BLUEPRINT
     return CN_BLUEPRINT

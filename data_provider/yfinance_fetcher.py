@@ -93,6 +93,11 @@ class YfinanceFetcher(BaseFetcher):
         """
         return is_suffix_market_symbol(stock_code, "tw")
 
+    @staticmethod
+    def _is_id_suffix_stock(stock_code: str) -> bool:
+        """Return True for Indonesia IDX Yahoo symbols (e.g. BBCA.JK)."""
+        return is_suffix_market_symbol(stock_code, "id")
+
     def _convert_stock_code(self, stock_code: str) -> str:
         """
         转换股票代码为 Yahoo Finance 格式
@@ -119,6 +124,10 @@ class YfinanceFetcher(BaseFetcher):
         """
         code = stock_code.strip().upper()
 
+        if code == "^JKSE":
+            logger.debug("Recognized Indonesia IHSG index: ^JKSE")
+            return code
+
         # 美股指数：映射到 Yahoo Finance 符号（如 SPX -> ^GSPC）
         yf_symbol, _ = get_us_index_yf_symbol(code)
         if yf_symbol:
@@ -130,9 +139,9 @@ class YfinanceFetcher(BaseFetcher):
             logger.debug(f"识别为美股代码: {code}")
             return code
 
-        # 日股/韩股/台股 MVP：显式 Yahoo Finance suffix-only 代码，原样传给 Yahoo。
-        if self._is_jp_kr_suffix_stock(code) or self._is_tw_suffix_stock(code):
-            logger.debug(f"识别为日韩台 Yahoo suffix 代码: {code}")
+        # 日股/韩股/台股/印尼股：显式 Yahoo Finance suffix-only 代码，原样传给 Yahoo。
+        if self._is_jp_kr_suffix_stock(code) or self._is_tw_suffix_stock(code) or self._is_id_suffix_stock(code):
+            logger.debug(f"识别为 Yahoo suffix 市场代码: {code}")
             return code
 
         # 港股：hk前缀 -> .HK后缀
@@ -143,7 +152,7 @@ class YfinanceFetcher(BaseFetcher):
             return f"{hk_code}.HK"
 
         # 已经包含后缀的情况
-        if '.SS' in code or '.SZ' in code or '.HK' in code or '.BJ' in code:
+        if '.SS' in code or '.SZ' in code or '.HK' in code or '.BJ' in code or '.JK' in code:
             return code
 
         # 去除可能的 .SH 后缀
@@ -356,6 +365,8 @@ class YfinanceFetcher(BaseFetcher):
             return self._get_kr_main_indices(yf)
         if region == "tw":
             return self._get_tw_main_indices(yf)
+        if region == "id":
+            return self._get_id_main_indices(yf)
 
         # A 股指数：akshare 代码 -> (yfinance 代码, 显示名称)
         yf_mapping = {
@@ -513,6 +524,28 @@ class YfinanceFetcher(BaseFetcher):
                 return results
         except Exception as e:
             logger.error(f"[Yfinance] 获取台湾指数行情失败: {e}")
+        return None
+
+    def _get_id_main_indices(self, yf) -> Optional[List[Dict[str, Any]]]:
+        """Get Indonesia main index quotes (IHSG / IDX Composite) via Yahoo Finance."""
+        id_indices = {
+            'JKSE': ('^JKSE', 'IHSG'),
+        }
+        results = []
+        try:
+            for code, (yf_symbol, name) in id_indices.items():
+                try:
+                    item = self._fetch_yf_ticker_data(yf, yf_symbol, name, code)
+                    if item:
+                        results.append(item)
+                        logger.debug(f"[Yfinance] 获取印尼指数 {name} 成功")
+                except Exception as e:
+                    logger.warning(f"[Yfinance] 获取印尼指数 {name} 失败: {e}")
+            if results:
+                logger.info(f"[Yfinance] 成功获取 {len(results)} 个印尼指数行情")
+                return results
+        except Exception as e:
+            logger.error(f"[Yfinance] 获取印尼指数行情失败: {e}")
         return None
 
     def _is_us_stock(self, stock_code: str) -> bool:
@@ -809,8 +842,9 @@ class YfinanceFetcher(BaseFetcher):
             self._is_us_stock(stock_code)
             or self._is_jp_kr_suffix_stock(stock_code)
             or self._is_tw_suffix_stock(stock_code)
+            or self._is_id_suffix_stock(stock_code)
         ):
-            logger.debug(f"[Yfinance] {stock_code} 不是美股或日韩 suffix 代码，跳过")
+            logger.debug(f"[Yfinance] {stock_code} 不是美股或支持的 Yahoo suffix 代码，跳过")
             return None
 
         try:

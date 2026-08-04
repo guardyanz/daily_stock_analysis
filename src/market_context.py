@@ -78,6 +78,10 @@ _MARKET_ROLES = {
         "zh": "台股",
         "en": "Taiwan stock",
     },
+    "id": {
+        "zh": "saham Indonesia / BEI",
+        "en": "Indonesia IDX stock",
+    },
 }
 
 _MARKET_GUIDELINES = {
@@ -144,6 +148,16 @@ _MARKET_GUIDELINES = {
             "electronics-foundry supply chain, the three institutional investor groups (foreign / "
             "investment-trust / dealer), margin trading and day trading, and the TWSE/TPEx ±10% daily "
             "price limit; do not apply China A-share-specific concepts such as Northbound flows or Dragon Tiger lists."
+        ),
+    },
+    "id": {
+        "zh": (
+            "- Analisis ini khusus **saham Indonesia** yang tercatat di BEI / IDX, dengan simbol Yahoo Finance seperti `.JK`.\n"
+            "- Gunakan konteks IHSG: rupiah, suku bunga Bank Indonesia, arus asing, kebijakan OJK/BEI, fraksi harga, serta aturan ARA/ARB."
+        ),
+        "en": (
+            "- This analysis covers an **Indonesia IDX stock** (Yahoo Finance suffix such as `.JK`).\n"
+            "- Use IHSG context: rupiah FX, Bank Indonesia rates, foreign flows, OJK/IDX policy, tick-size rules, and ARA/ARB daily price limits."
         ),
     },
 }

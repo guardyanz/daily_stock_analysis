@@ -38,7 +38,15 @@ except ImportError:
     )
 
 # Market -> exchange code (exchange-calendars)
-MARKET_EXCHANGE = {"cn": "XSHG", "hk": "XHKG", "us": "XNYS", "jp": "XTKS", "kr": "XKRX", "tw": "XTAI"}
+MARKET_EXCHANGE = {
+    "cn": "XSHG",
+    "hk": "XHKG",
+    "us": "XNYS",
+    "jp": "XTKS",
+    "kr": "XKRX",
+    "tw": "XTAI",
+    "id": "XIDX",
+}
 
 # Market -> IANA timezone for "today"
 MARKET_TIMEZONE = {
@@ -48,6 +56,7 @@ MARKET_TIMEZONE = {
     "jp": "Asia/Tokyo",
     "kr": "Asia/Seoul",
     "tw": "Asia/Taipei",
+    "id": "Asia/Jakarta",
 }
 
 # P0 market phase baseline (Issue #1386). This is an intentionally small
@@ -56,7 +65,7 @@ MARKET_TIMEZONE = {
 # tw: TWSE/TPEx run a 13:25–13:30 closing call auction (5 min). Without an entry
 # here .get(market, 0) yields a zero-width window, so the tw closing auction was
 # never labelled CLOSING_AUCTION (the last tick stayed INTRADAY, then POSTMARKET).
-_CLOSING_AUCTION_WINDOW_MINUTES = {"cn": 3, "hk": 10, "us": 5, "tw": 5}
+_CLOSING_AUCTION_WINDOW_MINUTES = {"cn": 3, "hk": 10, "us": 5, "tw": 5, "id": 10}
 _SUPPORTED_ANALYSIS_PHASES = {
     "auto",
     "premarket",
@@ -546,15 +555,15 @@ def compute_effective_region(
     Compute effective market review region given config and open markets.
 
     Args:
-        config_region: From MARKET_REVIEW_REGION ('cn' | 'hk' | 'us' | 'jp' | 'kr' | 'both' or comma subset)
+        config_region: From MARKET_REVIEW_REGION ('cn' | 'hk' | 'us' | 'jp' | 'kr' | 'id' | 'both' or comma subset)
         open_markets: Markets open today
 
     Returns:
         None: caller uses config default (check disabled)
         '': all relevant markets closed, skip market review
-        'cn' | 'hk' | 'us' | 'jp' | 'kr' | 'both': effective subset for today
+        'cn' | 'hk' | 'us' | 'jp' | 'kr' | 'id' | 'both': effective subset for today
     """
-    markets = ("cn", "hk", "us", "jp", "kr")
+    markets = ("cn", "hk", "us", "jp", "kr", "id")
     normalized = (config_region or "cn").strip().lower()
     if not normalized:
         normalized = "cn"

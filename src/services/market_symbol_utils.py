@@ -19,6 +19,7 @@ class SuffixMarketSpec:
     market: str
     suffixes: tuple[str, ...]
     digit_lengths: tuple[int, ...]
+    alpha_lengths: tuple[int, ...] = ()
 
 
 _SUFFIX_MARKET_SPECS: tuple[SuffixMarketSpec, ...] = (
@@ -27,6 +28,7 @@ _SUFFIX_MARKET_SPECS: tuple[SuffixMarketSpec, ...] = (
     # Taiwan support mirrors the same suffix-only pattern; keep it here so the
     # shared helpers stay complete for all yfinance-only offshore markets.
     SuffixMarketSpec("tw", ("TW", "TWO"), (4, 5, 6)),
+    SuffixMarketSpec("id", ("JK",), (), (1, 2, 3, 4, 5)),
 )
 
 _MARKET_TO_SPEC = {spec.market: spec for spec in _SUFFIX_MARKET_SPECS}
@@ -50,7 +52,7 @@ def split_suffix_symbol(stock_code: str) -> tuple[str, str] | None:
 
 
 def get_suffix_market(stock_code: str) -> Optional[str]:
-    """Return jp/kr/tw for supported suffix-only Yahoo symbols, else None."""
+    """Return supported suffix-only Yahoo market code, else None."""
 
     parts = split_suffix_symbol(stock_code)
     if parts is None:
@@ -59,7 +61,9 @@ def get_suffix_market(stock_code: str) -> Optional[str]:
     spec = _SUFFIX_TO_SPEC.get(suffix)
     if spec is None:
         return None
-    if not (base.isdigit() and len(base) in spec.digit_lengths):
+    base_is_supported_digits = base.isdigit() and len(base) in spec.digit_lengths
+    base_is_supported_alpha = base.isalpha() and len(base) in spec.alpha_lengths
+    if not (base_is_supported_digits or base_is_supported_alpha):
         return None
     return spec.market
 
