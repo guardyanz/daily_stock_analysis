@@ -1,0 +1,11 @@
+# Reviewed historical test fixtures and public configuration examples only.
+# Exact fingerprints keep unrelated findings in these files visible.
+# Redaction fixture: a synthetic token string inside risk_summary.
+ad15ebcec594ac1a460936e8abe5e5788522944e:tests/test_decision_signal_service.py:generic-api-key:383
+# Public Discord ID examples in configuration help, not authentication secrets.
+dad18835618e00077b507b0875907d4ddc8cacb4:src/core/config_registry.py:discord-client-id:3857
+fdb202cb3610fb63c1d792951df891de0c50d13e:src/core/config_registry.py:discord-client-id:1567
+# Explicit test placeholder used by the Anspire mocked provider.
+abde35bbf9ada6a53238874e111160b488472e84:tests/test_anspire_search.py:generic-api-key:138
+# Synthetic Anthropic provider key used by mocked unit tests.
+633bdda1e2bfdb19991da3ec782d7fb29fc0c8c1:tests/test_image_stock_extractor_litellm.py:generic-api-key:43

@@ -1,0 +1,67 @@
+name: IHSG Edition checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ihsg-checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  idx-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - run: python -m pip install -r .github/requirements-ci.txt
+      - run: python -m pytest tests/test_idx_market_support.py tests/test_ihsg_demo_server.py -q
+      - run: python -m py_compile scripts/ihsg_demo_server.py scripts/capture_ihsg_screenshots.py
+      - run: python scripts/check_ai_assets.py
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - name: Test, lint and build Android
+        working-directory: apps/ihsg-android
+        run: bash ./gradlew testDebugUnitTest lintDebug assembleDebug assembleRelease
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Capture app screenshots with synthetic fixtures
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: |
+            python scripts/ihsg_demo_server.py > /tmp/ihsg-demo.log 2>&1 &
+            adb install -r apps/ihsg-android/app/build/outputs/apk/debug/app-debug.apk
+            python scripts/capture_ihsg_screenshots.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ihsg-android-beta-evidence
+          path: |
+            apps/ihsg-android/app/build/outputs/apk/debug/app-debug.apk
+            apps/ihsg-android/app/build/outputs/apk/release/*.apk
+            apps/ihsg-android/app/build/reports/
+            artifacts/ihsg-screenshots/
