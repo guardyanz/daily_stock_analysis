@@ -35,6 +35,13 @@ python scripts/capture_ihsg_screenshots.py
 
 The script calibrates resolution and checks the connected fixture state before capturing. One-time outputs stay under ignored `artifacts/`; only selected product documentation images are committed.
 
+### Verified Android 15 captures
+
+<img src="images/ihsg/android-dashboard.png" alt="Connected synthetic demo dashboard" width="320" />
+<img src="images/ihsg/android-watchlist.png" alt="Synthetic watchlist quotes" width="320" />
+
+[Capture metadata](images/ihsg/capture.json) records the device, Android version and data provenance. [Workflow run 42317330943](https://github.com/guardyanz/daily_stock_analysis/actions/runs/42317330943) passed the backend regressions, Android tests, lint, debug/release build and emulator capture.
+
 ## Current limits
 
 - IDX prices use the Yahoo Finance data path and can be delayed, incomplete or unavailable. Preserve timestamps and verify important values against your data source.

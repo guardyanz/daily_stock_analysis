@@ -10,6 +10,13 @@ This is an independent, MIT-licensed fork of [ZhuLinsen/Daily Stock Analysis](ht
 
 **[Android beta and release notes](https://github.com/guardyanz/daily_stock_analysis/releases)** · [Setup and screenshots](docs/IHSG_EDITION.md) · [Android source](apps/ihsg-android) · [Upstream overview](README.upstream.md)
 
+<p align="center">
+  <img src="docs/images/ihsg/android-dashboard.png" alt="English IHSG Android dashboard connected to synthetic demo fixtures" width="320" />
+  <img src="docs/images/ihsg/android-watchlist.png" alt="Android quotes from synthetic fixtures" width="320" />
+</p>
+
+*Real app screenshots from Android 15 CI. Demo prices and reports are synthetic.*
+
 ## What is specific to this edition?
 
 - `.JK` stock symbols such as `BBCA.JK`, `TLKM.JK` and `ASII.JK`.
@@ -69,5 +76,3 @@ For broader backend validation, use `python -m pytest -m "not network"`. Android
 ## Upstream and license
 
 The engine is derived from [ZhuLinsen/Daily Stock Analysis](https://github.com/ZhuLinsen/daily_stock_analysis) under [MIT](LICENSE). Existing author credits and copyright notices remain. This fork is not endorsed by the upstream maintainers, BEI, OJK or any data provider. Upstream documentation and broader market features remain in [README.upstream.md](README.upstream.md); edition-specific behavior is documented in [docs/IHSG_EDITION.md](docs/IHSG_EDITION.md).
-
-

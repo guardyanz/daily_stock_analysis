@@ -92,3 +92,4 @@ docs/specs/
 # Local graph and one-time public-release verification artifacts
 graphify-out/
 /artifacts/
+apps/ihsg-android/.kotlin/

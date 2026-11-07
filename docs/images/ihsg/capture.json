@@ -1,0 +1,8 @@
+{
+  "source": "Real Android emulator UI; synthetic loopback API fixtures",
+  "package": "id.ihsg.stockanalysis.debug",
+  "resolution": "Physical size: 1080x1920",
+  "android": "15",
+  "device": "Android SDK built for x86_64",
+  "data": "Not live prices, not AI-generated financial analysis"
+}
