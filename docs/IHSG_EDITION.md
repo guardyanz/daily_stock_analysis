@@ -43,6 +43,7 @@ The script calibrates resolution and checks the connected fixture state before c
 - The inherited trading-calendar and ARA/ARB context are tooling inputs, not a complete statement of current exchange regulations.
 - Device screenshots verify the displayed flow, not live data reliability or predictive accuracy.
 - Scheduled analysis, provider billing and notifications require your own deliberate configuration; the demo never enables them.
+- The inherited daily-analysis schedule is opt-in for this edition. Set the GitHub repository variable `ENABLE_SCHEDULED_ANALYSIS=true` to enable it, or run that workflow manually.
 
 ## Provenance
 

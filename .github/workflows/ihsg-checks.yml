@@ -35,8 +35,11 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
-      - uses: android-actions/setup-android@v3
-      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - name: Install Android SDK packages
+        run: |
+          SDK_MANAGER="$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}/cmdline-tools" -path '*/bin/sdkmanager' -type f | sort -V | tail -n 1)"
+          test -n "$SDK_MANAGER"
+          "$SDK_MANAGER" --install 'platforms;android-36' 'build-tools;35.0.0'
       - name: Test, lint and build Android
         working-directory: apps/ihsg-android
         run: bash ./gradlew testDebugUnitTest lintDebug assembleDebug assembleRelease

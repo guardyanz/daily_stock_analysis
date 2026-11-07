@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - [文档] Publish the IDX/IHSG Edition overview, isolated environment example, upstream attribution and Android beta setup.
 - [测试] Add deterministic Android demo API fixtures, screenshot capture tooling and IHSG Edition CI with emulator evidence.
+- [修复] Install only supported Android SDK packages in edition CI and keep scheduled analysis opt-in.
 
 - [修复] Discord 长报告推送按 2000 字符上限分片逐段发送，遇到 429 限流会按 `retry_after`/`Retry-After` 有限重试，避免中途失败后只收到前半段报告。
 - [改进] #1777 台股三大法人 fetcher（`TwInstitutionalFetcher`）增加缓存防击穿：并发同 (市场, 日期) 调用合并为单次上游请求，保护 TWSE T86 ~3 req/5s 限流额度；不同 key 仍并行；新增并发单次抓取、不同 key 各抓一次、HTTP 错误 fail-open 回归测试。
