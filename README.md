@@ -64,10 +64,10 @@ python -m pytest tests/test_idx_market_support.py tests/test_ihsg_demo_server.py
 python scripts/check_ai_assets.py
 ```
 
-For broader backend validation, use `python -m pytest -m "not network"`. Android build, lint, unit tests and emulator screenshots run in [IHSG Edition checks](.github/workflows/ihsg-checks.yml). Improvements to IDX data provenance, trading calendars, API/client compatibility and Bahasa Indonesia documentation are welcome.
+For broader backend validation, use `python -m pytest -m "not network"`. Android build, lint, unit tests and emulator screenshots run in [IHSG Edition checks](.github/workflows/ihsg-checks.yml). Improvements to IDX data provenance, trading calendars, API/client compatibility and English documentation are welcome.
 
 ## Upstream and license
 
 The engine is derived from [ZhuLinsen/Daily Stock Analysis](https://github.com/ZhuLinsen/daily_stock_analysis) under [MIT](LICENSE). Existing author credits and copyright notices remain. This fork is not endorsed by the upstream maintainers, BEI, OJK or any data provider. Upstream documentation and broader market features remain in [README.upstream.md](README.upstream.md); edition-specific behavior is documented in [docs/IHSG_EDITION.md](docs/IHSG_EDITION.md).
 
-**Bahasa Indonesia:** Edisi ini berfokus pada saham BEI dan IHSG. Backend berjalan di komputer/server Anda; Android mengakses backend tersebut. Mulai dari demo sintetis tanpa API key, lalu konfigurasi penyedia AI sendiri untuk analisis nyata. Data dan keluaran perlu diperiksa secara mandiri.
+

@@ -26,7 +26,7 @@ data class IhsgUiState(
     val quotes: List<StockQuote> = emptyList(),
     val tasks: List<TaskInfo> = emptyList(),
     val history: List<HistoryItem> = emptyList(),
-    val connectionStatus: String = "Belum dicek",
+    val connectionStatus: String = "Not checked yet",
     val busy: Boolean = false,
     val error: String? = null,
     val selectedReport: String? = null
@@ -51,7 +51,7 @@ class IhsgViewModel(application: Application) : AndroidViewModel(application) {
     fun saveBaseUrl() {
         val normalized = uiState.value.baseUrl.trim().trimEnd('/')
         if (!normalized.startsWith("http://") && !normalized.startsWith("https://")) {
-            _uiState.update { it.copy(error = "URL backend harus diawali http:// atau https://") }
+            _uiState.update { it.copy(error = "Backend URL must start with http:// or https://") }
             return
         }
         settings.setBaseUrl(normalized)
@@ -66,7 +66,7 @@ class IhsgViewModel(application: Application) : AndroidViewModel(application) {
     fun addSymbol() {
         val symbol = IhsgSymbol.normalize(uiState.value.symbolInput)
         if (!IhsgSymbol.isValid(symbol)) {
-            _uiState.update { it.copy(error = "Kode harus saham IDX, contoh BBCA atau BBCA.JK") }
+            _uiState.update { it.copy(error = "Kode harus saham IDX, contoh BBCA or BBCA.JK") }
             return
         }
         launchBusy {
@@ -93,8 +93,8 @@ class IhsgViewModel(application: Application) : AndroidViewModel(application) {
     fun refresh() {
         launchBusy {
             when (val health = api().health()) {
-                is ApiResult.Ok -> _uiState.update { it.copy(connectionStatus = "Backend aktif: ${health.value}", error = null) }
-                is ApiResult.Err -> _uiState.update { it.copy(connectionStatus = "Backend belum tersambung", error = health.message) }
+                is ApiResult.Ok -> _uiState.update { it.copy(connectionStatus = "Connected: ${health.value}", error = null) }
+                is ApiResult.Err -> _uiState.update { it.copy(connectionStatus = "Backend disconnected", error = health.message) }
             }
 
             when (val dashboard = api().dashboard()) {

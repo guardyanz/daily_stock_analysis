@@ -113,9 +113,9 @@ class IhsgApiClient(
                     ApiResult.Ok(parser(json))
                 }
             } catch (e: IOException) {
-                ApiResult.Err("Tidak bisa terhubung ke backend IHSG: ${e.message}")
+                ApiResult.Err("Cannot connect to the IHSG backend: ${e.message}")
             } catch (e: Exception) {
-                ApiResult.Err("Respons backend tidak bisa dibaca: ${e.message}")
+                ApiResult.Err("Cannot read the backend response: ${e.message}")
             }
         }
 
@@ -141,9 +141,9 @@ private fun readError(bodyText: String, code: Int): String {
         when (detail) {
             is JSONObject -> detail.optString("message", detail.toString())
             is String -> detail
-            else -> json.optString("message", "Backend mengembalikan HTTP $code")
+            else -> json.optString("message", "Backend returned HTTP $code")
         }
-    }.getOrElse { "Backend mengembalikan HTTP $code" }
+    }.getOrElse { "Backend returned HTTP $code" }
 }
 
 private fun JSONObject.toStockQuote(): StockQuote = StockQuote(

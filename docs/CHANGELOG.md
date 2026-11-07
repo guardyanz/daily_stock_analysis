@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- [修复] Use the CI-provided JDK, publish Android 1.0.0-beta.1 and present the edition UI and public overview in English.
 - [文档] Publish the IDX/IHSG Edition overview, isolated environment example, upstream attribution and Android beta setup.
 - [测试] Add deterministic Android demo API fixtures, screenshot capture tooling and IHSG Edition CI with emulator evidence.
 - [修复] Install only supported Android SDK packages in edition CI and keep scheduled analysis opt-in.

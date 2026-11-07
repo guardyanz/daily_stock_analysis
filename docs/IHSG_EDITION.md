@@ -39,7 +39,7 @@ The script calibrates resolution and checks the connected fixture state before c
 
 - IDX prices use the Yahoo Finance data path and can be delayed, incomplete or unavailable. Preserve timestamps and verify important values against your data source.
 - Android is an online client of your backend. It does not contain a financial model, a local LLM, trading execution or a broker integration.
-- Default report language is English. Native controls contain Indonesian and English labels.
+- Default report language is English. The Android interface is in English.
 - The inherited trading-calendar and ARA/ARB context are tooling inputs, not a complete statement of current exchange regulations.
 - Device screenshots verify the displayed flow, not live data reliability or predictive accuracy.
 - Scheduled analysis, provider billing and notifications require your own deliberate configuration; the demo never enables them.
@@ -47,4 +47,4 @@ The script calibrates resolution and checks the connected fixture state before c
 
 ## Provenance
 
-Initial edition changes were based on commit `3c3bfcbd373d40dbda9a85c4f69801311e23d6df`; the previous upstream overview is preserved in `README.upstream.md`. MIT copyright notices remain in LICENSE. The main README is English-first with an Indonesian summary; the original Chinese upstream documentation remains available separately, since it describes broader markets and upstream deployment rather than this edition.
+Initial edition changes were based on commit `3c3bfcbd373d40dbda9a85c4f69801311e23d6df`; the previous upstream overview is preserved in `README.upstream.md`. MIT copyright notices remain in LICENSE. The public overview and edition guides are in English. README.upstream.md preserves the upstream English overview, which covers broader markets and upstream deployment rather than this edition.

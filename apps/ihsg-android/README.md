@@ -11,14 +11,17 @@ The app expects the FastAPI backend to be reachable from the phone or emulator:
 
 Build commands:
 
-```powershell
-$env:JAVA_HOME="C:\Program Files\Android\Android Studio\jbr"
-.\gradlew.bat testDebugUnitTest assembleRelease bundleRelease
+Use JDK 17 and Android SDK 36. Set `JAVA_HOME` and `ANDROID_HOME` to your installations; no machine-specific JDK path is committed.
+
+```sh
+./gradlew testDebugUnitTest lintDebug assembleDebug assembleRelease
 ```
+
+On Windows, use `gradlew.bat`. The release is signed only when your ignored `keystore.properties` supplies your own signing configuration. CI produces a debug APK and an unsigned release APK. The GitHub beta release provides the maintainer-signed APK with checksums.
 
 Release outputs:
 
 - APK: `app/build/outputs/apk/release/app-release.apk`
-- AAB: `app/build/outputs/bundle/release/app-release.aab`
+- Unsigned release when no signing configuration exists: `app/build/outputs/apk/release/app-release-unsigned.apk`
 
 The app only accepts IDX/Yahoo Jakarta symbols with `.JK`, such as `BBCA.JK`, `TLKM.JK`, and `ASII.JK`.

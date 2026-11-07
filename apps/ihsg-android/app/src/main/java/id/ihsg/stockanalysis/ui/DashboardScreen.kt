@@ -152,7 +152,7 @@ private fun DashboardContent(
                     SectionHeader("Market Quotes", Icons.AutoMirrored.Filled.ShowChart)
                 }
                 if (state.quotes.isEmpty()) {
-                    item { EmptyState("Belum ada quote. Pastikan backend aktif dan watchlist berisi saham .JK.") }
+                    item { EmptyState("No quotes yet. Connect the backend and add .JK stocks to your watchlist.") }
                 } else {
                     items(state.quotes, key = { it.stockCode }) { quote ->
                         QuoteCard(quote = quote, onAnalyze = onAnalyze)
@@ -162,7 +162,7 @@ private fun DashboardContent(
                     SectionHeader("Task Monitor", Icons.Default.CloudSync)
                 }
                 if (state.tasks.isEmpty()) {
-                    item { EmptyState("Belum ada task analisis aktif.") }
+                    item { EmptyState("No active analysis tasks.") }
                 } else {
                     items(state.tasks, key = { it.taskId.ifBlank { it.hashCode().toString() } }) { task ->
                         TaskCard(task = task, onSelectReport = onSelectReport)
@@ -172,7 +172,7 @@ private fun DashboardContent(
                     SectionHeader("Latest Reports", Icons.AutoMirrored.Filled.Article)
                 }
                 if (state.history.isEmpty()) {
-                    item { EmptyState("Riwayat analisis IHSG belum tersedia.") }
+                    item { EmptyState("No IHSG analysis history yet.") }
                 } else {
                     items(state.history, key = { it.queryId }) { item ->
                         HistoryCard(item)
@@ -204,10 +204,10 @@ private fun ConnectionPanel(
 ) {
     CardBlock {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            StatusDot(isConnected = state.error == null && state.connectionStatus.contains("aktif", ignoreCase = true))
+            StatusDot(isConnected = state.error == null && state.connectionStatus.startsWith("Connected:"))
             Column(Modifier.weight(1f)) {
                 Text(state.connectionStatus, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text("Backend lokal: emulator pakai 10.0.2.2, device pakai IP LAN PC.", style = MaterialTheme.typography.bodySmall)
+                Text("Local backend: use 10.0.2.2 on an emulator or an ADB tunnel on a device.", style = MaterialTheme.typography.bodySmall)
             }
         }
         Spacer(Modifier.height(12.dp))
@@ -220,7 +220,7 @@ private fun ConnectionPanel(
                 label = { Text("API Base URL") }
             )
             IconButton(onClick = onSaveBaseUrl) {
-                Icon(Icons.Default.Save, contentDescription = "Simpan URL")
+                Icon(Icons.Default.Save, contentDescription = "Save URL")
             }
         }
         state.error?.let {
@@ -244,12 +244,12 @@ private fun ActionPanel(
                 value = state.symbolInput,
                 onValueChange = onSymbolChanged,
                 singleLine = true,
-                label = { Text("Kode IDX") },
-                placeholder = { Text("BBCA atau BBCA.JK") },
+                label = { Text("IDX symbol") },
+                placeholder = { Text("BBCA or BBCA.JK") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters)
             )
             IconButton(onClick = onAddSymbol, enabled = !state.busy) {
-                Icon(Icons.Default.Add, contentDescription = "Tambah saham")
+                Icon(Icons.Default.Add, contentDescription = "Add stock")
             }
         }
         Spacer(Modifier.height(10.dp))
@@ -260,7 +260,7 @@ private fun ActionPanel(
         ) {
             Icon(Icons.Default.CandlestickChart, contentDescription = null)
             Spacer(Modifier.size(8.dp))
-            Text("Jalankan Market Review IHSG")
+            Text("Run IHSG Market Review")
         }
     }
 }
@@ -275,7 +275,7 @@ private fun WatchlistChips(symbols: List<String>, onRemoveSymbol: (String) -> Un
                 label = { Text(symbol) },
                 trailingIcon = {
                     IconButton(modifier = Modifier.size(28.dp), onClick = { onRemoveSymbol(symbol) }) {
-                        Icon(Icons.Default.Close, contentDescription = "Hapus $symbol", modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.Close, contentDescription = "Remove $symbol", modifier = Modifier.size(16.dp))
                     }
                 }
             )
@@ -344,7 +344,7 @@ private fun TaskCard(task: TaskInfo, onSelectReport: (String) -> Unit) {
         if (task.reportText != null) {
             Spacer(Modifier.height(8.dp))
             TextButton(onClick = { onSelectReport(task.reportText) }) {
-                Text("Buka laporan market review")
+                Text("Open market review report")
             }
         }
     }
@@ -388,10 +388,10 @@ private fun ReportOverlay(report: String, onClose: () -> Unit) {
     ) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Market Review IHSG", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text("IHSG Market Review", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onClose) {
-                    Icon(Icons.Default.Close, contentDescription = "Tutup laporan")
+                    Icon(Icons.Default.Close, contentDescription = "Close report")
                 }
             }
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
