@@ -2,6 +2,10 @@ name: IHSG Edition checks
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'README*.md'
+      - 'docs/**'
+      - '.gitleaksignore'
   pull_request:
     branches: [main]
   workflow_dispatch:
